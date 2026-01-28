@@ -4,4 +4,4 @@ app = FastAPI()
 
 @app.get("/")
 def root():
-    return {"status": "ok"}
+    return {"status": "DEPLOY TEST 1"}
