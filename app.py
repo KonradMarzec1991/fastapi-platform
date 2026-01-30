@@ -2,7 +2,6 @@ import os
 
 from fastapi import FastAPI
 
-APP_VERSION = os.getenv("APP_VERSION", "dev")
 
 app = FastAPI()
 
@@ -14,4 +13,4 @@ def root():
 
 @app.get("/version")
 def version():
-    return {"version": APP_VERSION}
+    return {"version": os.getenv("APP_VERSION", "unknown")}

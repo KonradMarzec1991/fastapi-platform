@@ -1,17 +1,27 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      python: 3.11
+  pre_build:
     commands:
-      - pip install -r requirements.txt
+      - echo Logging in to ECR...
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 622711946516.dkr.ecr.us-east-1.amazonaws.com
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=$COMMIT_HASH
 
   build:
     commands:
-      - pytest
-      - echo $CODEBUILD_RESOLVED_SOURCE_VERSION > version.txt
+      - echo Building Docker image...
+      - docker build -t fastapi-demo:$IMAGE_TAG .
+      - docker tag fastapi-demo:$IMAGE_TAG 622711946516.dkr.ecr.us-east-1.amazonaws.com/fastapi-demo:latest
+
+  post_build:
+    commands:
+      - echo Pushing image...
+      - docker push 622711946516.dkr.ecr.us-east-1.amazonaws.com/fastapi-demo:$IMAGE_TAG
+
+      - echo Writing image definitions...
+      - printf '[{"name":"fastapi-container","imageUri":"622711946516.dkr.ecr.us-east-1.amazonaws.com/fastapi-demo:%s"}]' $IMAGE_TAG > imagedefinitions.json
 
 artifacts:
   files:
-    - '**/*'
+    - imagedefinitions.json
