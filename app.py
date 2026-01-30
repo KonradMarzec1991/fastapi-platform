@@ -10,5 +10,8 @@ app = FastAPI()
 def root():
     return {
         "status": "PIPELINE FINAL TEST",
-        "version": APP_VERSION
     }
+
+@app.get("/version")
+def version():
+    return {"version": APP_VERSION}
