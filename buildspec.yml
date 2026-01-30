@@ -10,7 +10,7 @@ phases:
   build:
     commands:
       - pytest
-      - echo "APP_VERSION=$CODEBUILD_RESOLVED_SOURCE_VERSION" > version.txt
+      - echo $CODEBUILD_RESOLVED_SOURCE_VERSION > version.txt
 
 artifacts:
   files:
