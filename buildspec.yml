@@ -18,7 +18,6 @@ phases:
     commands:
       - echo Pushing image...
       - docker push 622711946516.dkr.ecr.us-east-1.amazonaws.com/fastapi-demo:$IMAGE_TAG
-
       - echo Writing image definitions...
       - printf '[{"name":"fastapi-container","imageUri":"622711946516.dkr.ecr.us-east-1.amazonaws.com/fastapi-demo:%s"}]' $IMAGE_TAG > imagedefinitions.json
 
