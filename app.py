@@ -2,6 +2,9 @@ import os
 import time
 
 from fastapi import FastAPI
+from fastapi import HTTPException
+
+from features import get_features
 
 APP_ENV = os.getenv("APP_ENV", "dev")
 LOG_LEVEL = os.getenv("LOG_LEVEL", "info")
@@ -42,3 +45,14 @@ def load():
 def slow():
     time.sleep(2)
     return {"ok": True}
+
+@app.get("/_features")
+def features():
+    return get_features()
+
+@app.get("/new-api")
+def new_api():
+    if not get_features().get("new_api"):
+        raise HTTPException(status_code=404)
+
+    return {"msg": "new api enabled"}
