@@ -28,3 +28,10 @@ def env():
         "env": APP_ENV,
         "log_level": LOG_LEVEL
     }
+
+@app.get("/load")
+def load():
+    x = 0
+    for i in range(10_000_000):
+        x += i
+    return {"status": "ok"}
