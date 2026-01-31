@@ -13,7 +13,7 @@ phases:
     commands:
       - echo Building Docker image...
       - docker build -t fastapi-demo:$IMAGE_TAG .
-      - docker tag fastapi-demo:$IMAGE_TAG 622711946516.dkr.ecr.us-east-1.amazonaws.com/fastapi-demo:latest
+      - docker tag fastapi-demo:$IMAGE_TAG 622711946516.dkr.ecr.us-east-1.amazonaws.com/fastapi-demo:$IMAGE_TAG
 
   post_build:
     commands:
