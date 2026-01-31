@@ -42,9 +42,16 @@ def load():
 
 
 @app.get("/slow")
-def slow():
+def slow_endpoint():
+    features = get_features()
+
+    if not features.get("slow_endpoint", False):
+        raise HTTPException(status_code=404, detail="Feature disabled")
+
+    import time
     time.sleep(2)
-    return {"ok": True}
+
+    return {"msg": "slow endpoint active"}
 
 @app.get("/_features")
 def features():
