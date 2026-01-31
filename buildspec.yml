@@ -1,5 +1,10 @@
 version: 0.2
 
+env:
+  variables:
+    AWS_REGION: us-east-1
+    ECR_REPO: 622711946516.dkr.ecr.us-east-1.amazonaws.com/fastapi-demo
+
 phases:
   pre_build:
     commands:
