@@ -14,3 +14,8 @@ def root():
 @app.get("/version")
 def version():
     return {"version": os.getenv("APP_VERSION", "unknown")}
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
