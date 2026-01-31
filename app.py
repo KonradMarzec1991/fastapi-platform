@@ -1,4 +1,5 @@
 import os
+import time
 
 from fastapi import FastAPI
 
@@ -35,3 +36,9 @@ def load():
     for i in range(10_000_000):
         x += i
     return {"status": "ok"}
+
+
+@app.get("/slow")
+def slow():
+    time.sleep(2)
+    return {"ok": True}
