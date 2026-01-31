@@ -5,7 +5,7 @@ import boto3
 SSM_PARAM = "/fastapi/prod/features"
 REFRESH_SECONDS = 30
 
-_client = boto3.client("ssm")
+_client = boto3.client("ssm", region_name="us-east-1")
 _cache = {"data": {}, "ts": 0}
 
 
