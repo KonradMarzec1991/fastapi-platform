@@ -22,7 +22,7 @@ phases:
   post_build:
     commands:
       - docker push $ECR_REPO:$IMAGE_TAG
-      - printf '[{"name":"fastapi","imageUri":"%s"}]' $ECR_REPO:$IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"fastapi-container","imageUri":"%s"}]' $ECR_REPO:$IMAGE_TAG > imagedefinitions.json
 
 artifacts:
   files:
