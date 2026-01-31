@@ -18,12 +18,10 @@ phases:
     commands:
       - docker build -t fastapi-demo:$IMAGE_TAG .
       - docker tag fastapi-demo:$IMAGE_TAG $ECR_REPO:$IMAGE_TAG
-      - docker tag fastapi-demo:$IMAGE_TAG $ECR_REPO:latest
 
   post_build:
     commands:
       - docker push $ECR_REPO:$IMAGE_TAG
-      - docker push $ECR_REPO:latest
       - printf '[{"name":"fastapi","imageUri":"%s"}]' $ECR_REPO:$IMAGE_TAG > imagedefinitions.json
 
 artifacts:
