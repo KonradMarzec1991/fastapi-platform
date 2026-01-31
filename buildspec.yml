@@ -1,26 +1,29 @@
 version: 0.2
 
+env:
+  variables:
+    AWS_REGION: us-east-1
+    ECR_REPO: 622711946516.dkr.ecr.us-east-1.amazonaws.com/fastapi-demo
+
 phases:
   pre_build:
     commands:
-      - echo Logging in to ECR...
-      - docker login -u dockerkm271 -p konradmarzec1991
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 622711946516.dkr.ecr.us-east-1.amazonaws.com
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=$COMMIT_HASH
 
   build:
     commands:
-      - echo Building Docker image...
       - docker build -t fastapi-demo:$IMAGE_TAG .
-      - docker tag fastapi-demo:$IMAGE_TAG 622711946516.dkr.ecr.us-east-1.amazonaws.com/fastapi-demo:$IMAGE_TAG
+      - docker tag fastapi-demo:$IMAGE_TAG $ECR_REPO:$IMAGE_TAG
+      - docker tag fastapi-demo:$IMAGE_TAG $ECR_REPO:latest
 
   post_build:
     commands:
-      - echo Pushing image...
-      - docker push 622711946516.dkr.ecr.us-east-1.amazonaws.com/fastapi-demo:$IMAGE_TAG
-      - echo Writing image definitions...
-      - printf '[{"name":"fastapi-container","imageUri":"622711946516.dkr.ecr.us-east-1.amazonaws.com/fastapi-demo:%s"}]' $IMAGE_TAG > imagedefinitions.json
+      - docker push $ECR_REPO:$IMAGE_TAG
+      - docker push $ECR_REPO:latest
+      - printf '[{"name":"fastapi","imageUri":"%s"}]' $ECR_REPO:$IMAGE_TAG > imagedefinitions.json
 
 artifacts:
   files:
