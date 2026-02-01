@@ -10,7 +10,7 @@ def do_heavy_work(request_id: str):
     print(f"[{now()}] START heavy_work request_id={request_id}")
 
     # symulacja ciężkiej pracy
-    time.sleep(5)
+    time.sleep(2)
 
     print(f"[{now()}] END heavy_work request_id={request_id}")
 

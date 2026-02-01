@@ -1,12 +1,14 @@
 import os
 import uuid
+from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi import HTTPException
 
 from features import get_features
 from heavy_work import now, do_heavy_work
 from sqs_client import enqueue_task
+from tree import build_tree
 
 APP_ENV = os.getenv("APP_ENV", "dev")
 LOG_LEVEL = os.getenv("LOG_LEVEL", "info")
@@ -68,10 +70,7 @@ def slow_endpoint():
         }
 
     # ===== NORMAL MODE =====
-    result = do_heavy_work(
-        request_id=request_id,
-        received_at=received_at
-    )
+    result = do_heavy_work(request_id=request_id)
 
     return {
         "status": "processed",
@@ -88,3 +87,9 @@ def new_api():
         raise HTTPException(status_code=404)
 
     return {"msg": "new api enabled"}
+
+@app.get("/tree", response_class=Response)
+def tree():
+    lines = build_tree(Path("./"))
+    output = "\n".join(lines)
+    return Response(content=output, media_type="text/plain")
