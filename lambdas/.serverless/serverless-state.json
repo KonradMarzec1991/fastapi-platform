@@ -192,7 +192,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/fastapi-feature-flags/prod/1769917786606-2026-02-01T03:49:46.606Z/fastapi-feature-flags.zip"
+                "S3Key": "serverless/fastapi-feature-flags/prod/1769955341921-2026-02-01T14:15:41.921Z/fastapi-feature-flags.zip"
               },
               "Handler": "feature_flags/handler.handler",
               "Runtime": "python3.11",
@@ -211,14 +211,14 @@
               "FeatureToggleLogGroup"
             ]
           },
-          "FeatureToggleLambdaVersionK9TiLgGtVOQ3hzGF7bO5BPc5ejaIZJ4uEbpyG3qo": {
+          "FeatureToggleLambdaVersionZ7oappX4n52IJdaI0fuYLz2pQOHuU45K2k0C37aSg": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "FeatureToggleLambdaFunction"
               },
-              "CodeSha256": "YsSqztKNkS+1w2DId55BUcZB5XUsLZK7xvc46k7gCP4=",
+              "CodeSha256": "Z0veC1X6TrDhlh228wY2E7UEPO+YV5ltitJlOZWEzGc=",
               "Description": "Enable/disable FastAPI features via SSM (kill-switch)"
             }
           },
@@ -380,7 +380,7 @@
           "FeatureToggleLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "FeatureToggleLambdaVersionK9TiLgGtVOQ3hzGF7bO5BPc5ejaIZJ4uEbpyG3qo"
+              "Ref": "FeatureToggleLambdaVersionZ7oappX4n52IJdaI0fuYLz2pQOHuU45K2k0C37aSg"
             },
             "Export": {
               "Name": "sls-fastapi-feature-flags-prod-FeatureToggleLambdaFunctionQualifiedArn"
@@ -505,7 +505,7 @@
         "timeout": 10,
         "runtime": "python3.11",
         "vpc": {},
-        "versionLogicalId": "FeatureToggleLambdaVersionK9TiLgGtVOQ3hzGF7bO5BPc5ejaIZJ4uEbpyG3qo"
+        "versionLogicalId": "FeatureToggleLambdaVersionZ7oappX4n52IJdaI0fuYLz2pQOHuU45K2k0C37aSg"
       }
     },
     "configValidationMode": "warn",
@@ -525,7 +525,7 @@
     "artifact": "/home/konradmarzec/Projects/fastapi-demo/lambdas/.serverless/fastapi-feature-flags.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/fastapi-feature-flags/prod/1769917786606-2026-02-01T03:49:46.606Z",
+    "artifactDirectoryName": "serverless/fastapi-feature-flags/prod/1769955341921-2026-02-01T14:15:41.921Z",
     "artifact": "fastapi-feature-flags.zip"
   }
 }
