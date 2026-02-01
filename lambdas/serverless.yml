@@ -1,0 +1,58 @@
+service: fastapi-feature-flags
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: python3.11
+  region: us-east-1
+  stage: prod
+  timeout: 10
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - ssm:GetParameter
+            - ssm:PutParameter
+          Resource:
+            - arn:aws:ssm:us-east-1:622711946516:parameter/fastapi/*
+
+functions:
+  featureToggle:
+    name: fastapi-feature-toggle
+    handler: feature_flags/handler.handler
+    description: Enable/disable FastAPI features via SSM (kill-switch)
+    events:
+      # ===== ALARM =====
+      - eventBridge:
+          pattern:
+            source:
+              - aws.cloudwatch
+            detail-type:
+              - CloudWatch Alarm State Change
+            detail:
+              alarmName:
+                - fastapi-cpu-alarm
+              state:
+                value:
+                  - ALARM
+          input:
+            action: disable
+
+      # ===== OK =====
+      - eventBridge:
+          pattern:
+            source:
+              - aws.cloudwatch
+            detail-type:
+              - CloudWatch Alarm State Change
+            detail:
+              alarmName:
+                - fastapi-cpu-alarm
+              state:
+                value:
+                  - OK
+          input:
+            action: enable

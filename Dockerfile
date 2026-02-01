@@ -5,6 +5,7 @@ ENV PYTHONUNBUFFERED=1
 ENV FEATURE_FLAGS_PARAM=/fastapi/prod/features
 ENV FEATURE_FLAGS_TTL=30
 ENV AWS_REGION=us-east-1
+ENV SLOW_QUEUE_URL=https://sqs.us-east-1.amazonaws.com/622711946516/fastapi-slow-queue
 
 WORKDIR /app
 

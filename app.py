@@ -1,10 +1,12 @@
 import os
-import time
+import uuid
 
 from fastapi import FastAPI
 from fastapi import HTTPException
 
 from features import get_features
+from heavy_work import now, do_heavy_work
+from sqs_client import enqueue_task
 
 APP_ENV = os.getenv("APP_ENV", "dev")
 LOG_LEVEL = os.getenv("LOG_LEVEL", "info")
@@ -41,17 +43,40 @@ def load():
     return {"status": "ok"}
 
 
-@app.get("/slow")
+@app.post("/slow")
 def slow_endpoint():
+    request_id = str(uuid.uuid4())
+    received_at = now()
+
+    print(f"[{received_at}] REQUEST received request_id={request_id}")
+
     features = get_features()
 
-    if not features.get("slow_endpoint", False):
-        raise HTTPException(status_code=404, detail="Feature disabled")
+    # ===== DEGRADED MODE =====
+    if not features["slow_endpoint"]:
+        enqueue_task({
+            "request_id": request_id,
+            "received_at": received_at
+        })
 
-    import time
-    time.sleep(2)
+        print(f"[{now()}] QUEUED request_id={request_id}")
 
-    return {"msg": "slow endpoint active"}
+        return {
+            "status": "queued",
+            "request_id": request_id,
+            "received_at": received_at
+        }
+
+    # ===== NORMAL MODE =====
+    result = do_heavy_work(
+        request_id=request_id,
+        received_at=received_at
+    )
+
+    return {
+        "status": "processed",
+        **result
+    }
 
 @app.get("/_features")
 def features():
