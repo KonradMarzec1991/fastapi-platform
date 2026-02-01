@@ -43,7 +43,7 @@ def load():
     return {"status": "ok"}
 
 
-@app.post("/slow")
+@app.get("/slow")
 def slow_endpoint():
     request_id = str(uuid.uuid4())
     received_at = now()
@@ -53,7 +53,7 @@ def slow_endpoint():
     features = get_features()
 
     # ===== DEGRADED MODE =====
-    if not features["slow_endpoint"]:
+    if not features.get("slow_endpoint"):
         enqueue_task({
             "request_id": request_id,
             "received_at": received_at
