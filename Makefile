@@ -33,7 +33,7 @@ docker: docker-push
 
 # ===== LOCAL RUN =====
 run:
-	fastapi run app.py
+	docker run -p 8000:8000 -v ~/.aws:/root/.aws:ro -e AWS_PROFILE=dev fastapi-demo
 
 # ===== GIT =====
 push-all:
