@@ -1,3 +1,5 @@
+"""Handlers for Lambda events"""
+
 from feature_flags.shared import set_feature
 
 
